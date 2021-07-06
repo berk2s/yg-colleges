@@ -1,4 +1,4 @@
-package com.yataygecisle.preference.college;
+package com.yataygecisle.preference.colleges;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
