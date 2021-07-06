@@ -26,9 +26,17 @@ public class Country extends BaseEntity {
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Course> courses = new ArrayList<>();
 
+    @OneToMany(mappedBy = "country", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<Province> provinces = new ArrayList<>();
+
     public void addCourse(Course course) {
         course.setCountry(this);
         courses.add(course);
+    }
+
+    public void addProvince(Province province) {
+        province.setCountry(this);
+        provinces.add(province);
     }
 
 }

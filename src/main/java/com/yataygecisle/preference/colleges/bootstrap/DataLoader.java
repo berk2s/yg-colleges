@@ -35,20 +35,20 @@ public class DataLoader implements CommandLineRunner {
 
     @Transactional
     private void loadInitialData() {
-        Country country = new Country();
-        country.setCountryId(UUID.randomUUID());
-        country.setCountryName("Turkey");
 
         District district = new District();
         district.setDistrictId(UUID.randomUUID());
         district.setDistrictName("Besiktas");
-
 
         Province province = new Province();
         province.setProvinceId(UUID.randomUUID());
         province.setProvinceName("Istanbul");
         province.addDistrict(district);
 
+        Country country = new Country();
+        country.setCountryId(UUID.randomUUID());
+        country.setCountryName("Turkey");
+        country.addProvince(province);
 
         countryRepository.save(country);
         provinceRepository.save(province);
@@ -81,10 +81,7 @@ public class DataLoader implements CommandLineRunner {
         college.addFaculty(faculty);
         college.addCourse(course);
 
-
         collegeRepository.save(college);
-
-
     }
 
 }

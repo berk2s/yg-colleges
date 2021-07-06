@@ -112,4 +112,13 @@ public class Course extends BaseEntity {
         district.getCourses().add(this);
     }
 
+    public void addCollege(College college) {
+        this.college = college;
+        college.getCourses().add(this);
+    }
+    public void addFaculty(Faculty faculty) {
+        this.faculty = faculty;
+        faculty.getCourses().add(this);
+    }
+
 }

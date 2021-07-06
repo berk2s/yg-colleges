@@ -2,6 +2,7 @@ package com.yataygecisle.preference.colleges.web.mappers;
 
 import com.yataygecisle.preference.colleges.domain.Course;
 import com.yataygecisle.preference.colleges.web.models.CourseDto;
+import com.yataygecisle.preference.colleges.web.models.CreateCourseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -25,9 +26,11 @@ public interface CourseMapper {
             @Mapping(target = "courseFeature", expression = "java( course.getCourseFeature().name() )"),
             @Mapping(target = "determinedPointType", expression = "java( course.getPointType().name() )"),
             @Mapping(source = "nominalQuota", target = "nominalQuota")
-            //     @Mapping(target = "specialConditions", expression = "java( course.getConditions().stream().map(c -> c.getReferenceNumber().toString()).collect(Collectors.toList()) )")
+            //@Mapping(target = "specialConditions", expression = "java( course.getConditions().stream().map(c -> c.getReferenceNumber().toString()).collect(Collectors.toList()) )")
             //@Mapping(target = "specialConditions", source = "conditions")
     })
     CourseDto courseToCourseDto(Course course);
+
+    Course createCourseDtoToCourseDto(CreateCourseDto course);
 
 }
