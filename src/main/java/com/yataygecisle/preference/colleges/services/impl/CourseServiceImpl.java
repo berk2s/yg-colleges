@@ -7,6 +7,7 @@ import com.yataygecisle.preference.colleges.web.mappers.CourseMapper;
 import com.yataygecisle.preference.colleges.web.models.CourseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
 
+    @PreAuthorize("hasAuthority('READ_COURSE')")
     @Override
     public CourseDto getCourseById(UUID courseId) {
 

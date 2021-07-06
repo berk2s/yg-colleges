@@ -1,6 +1,9 @@
 package com.yataygecisle.preference.colleges.web.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yataygecisle.preference.colleges.domain.Course;
+import com.yataygecisle.preference.colleges.web.models.CreateCourseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 
@@ -20,14 +24,21 @@ public class CourseControllerTest extends IntegrationTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     UUID courseId;
+
+    String accessToken;
 
     @Nested
     class TestEndpoint {
 
         @BeforeEach
-        void setUp() {
+        void setUp() throws JsonProcessingException {
             courseId = UUID.randomUUID();
+
+            accessToken = createAccessToken();
         }
 
         @DisplayName("Get Course Successfully")
@@ -36,7 +47,8 @@ public class CourseControllerTest extends IntegrationTest {
 
             Course course = getCourse();
 
-            mockMvc.perform(get(CourseController.ENDPOINT + "/" + course.getId().toString()))
+            mockMvc.perform(get(CourseController.ENDPOINT + "/" + course.getId().toString())
+                    .header("Authorization", "Bearer " + accessToken))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.courseId", is(course.getId().toString())))
@@ -60,6 +72,20 @@ public class CourseControllerTest extends IntegrationTest {
                     .andExpect(jsonPath("$.specialConditions").isEmpty())
                     .andExpect(jsonPath("$.minimumRequiredOrder", is(course.getMinimumRequiredOrder())))
                     .andExpect(jsonPath("$.price").isEmpty());
+
+        }
+
+        @DisplayName("Create Course Successfully")
+        @Test
+        void createCourseSuccessfully() throws Exception {
+
+            CreateCourseDto createCourseDto = new CreateCourseDto();
+
+            mockMvc.perform(post(CourseController.ENDPOINT)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createCourseDto)))
+                    .andExpect(status().isCreated());
 
         }
 
