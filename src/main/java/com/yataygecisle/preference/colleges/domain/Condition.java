@@ -15,10 +15,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Condition {
+@Table(name = "condition_list")
+public class Condition extends BaseEntity {
 
-    @Id
-    @Column(name = "condition_id")
+    @Column(name = "condition_remote_id")
     private UUID conditionId;
 
     @Column(name = "reference_number")

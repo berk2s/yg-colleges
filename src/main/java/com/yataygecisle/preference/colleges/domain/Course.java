@@ -83,7 +83,7 @@ public class Course extends BaseEntity {
             joinColumns = {
                 @JoinColumn(name = "course_id", referencedColumnName = "id")
             }, inverseJoinColumns = {
-                @JoinColumn(name = "condition_id", referencedColumnName = "condition_id")
+                @JoinColumn(name = "condition_id", referencedColumnName = "id")
     })
     private List<Condition> conditions = new ArrayList<>();
 
@@ -116,6 +116,7 @@ public class Course extends BaseEntity {
         this.college = college;
         college.getCourses().add(this);
     }
+
     public void addFaculty(Faculty faculty) {
         this.faculty = faculty;
         faculty.getCourses().add(this);

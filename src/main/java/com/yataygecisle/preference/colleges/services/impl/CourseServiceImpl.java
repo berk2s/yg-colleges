@@ -3,7 +3,10 @@ package com.yataygecisle.preference.colleges.services.impl;
 import com.yataygecisle.preference.colleges.domain.*;
 import com.yataygecisle.preference.colleges.repository.*;
 import com.yataygecisle.preference.colleges.services.CourseService;
+import com.yataygecisle.preference.colleges.web.exceptions.ConditionNotFoundException;
 import com.yataygecisle.preference.colleges.web.exceptions.CourseNotFoundException;
+import com.yataygecisle.preference.colleges.web.exceptions.DistrictNotFoundException;
+import com.yataygecisle.preference.colleges.web.exceptions.FacultyNotFoundException;
 import com.yataygecisle.preference.colleges.web.mappers.CourseMapper;
 import com.yataygecisle.preference.colleges.web.models.CourseDto;
 import com.yataygecisle.preference.colleges.web.models.CreateCourseDto;
@@ -36,7 +39,7 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> {
                    log.warn("Cannot find course by given course id [courseId: {}]", courseId);
-                   throw new CourseNotFoundException(ErrorDesc.COURSE_NOT_FOUND.name());
+                   throw new CourseNotFoundException(ErrorDesc.COURSE_NOT_FOUND.getErrorDesc());
                 });
 
         return courseMapper.courseToCourseDto(course);
@@ -53,26 +56,27 @@ public class CourseServiceImpl implements CourseService {
         Faculty faculty = facultyRepository.findById(facultyId)
                 .orElseThrow(() -> {
                    log.warn("Cannot find faculty by given faculty id [facultyId: {}]", facultyId.toString());
-                   throw new RuntimeException("!!"); // TODO
+                   throw new FacultyNotFoundException(ErrorDesc.FACULTY_NOT_FOUND.getErrorDesc());
                 });
 
         District district = districtRepository.findById(districtId)
                 .orElseThrow(() -> {
                     log.warn("Cannot find district by given district id [districtId: {}]", districtId.toString());
-                    throw new RuntimeException("!!"); // TODO
+                    throw new DistrictNotFoundException(ErrorDesc.DISTRICT_NOT_FOUND.getErrorDesc());
                 });
 
-        createCourseDto.getSpecialConditions().forEach(r -> {
-            UUID conditionId = UUID.fromString(r);
+        for (String _conditionId : createCourseDto.getSpecialConditions()) {
+            UUID conditionId = UUID.fromString(_conditionId);
 
             Condition condition = conditionRepository.findById(conditionId)
                     .orElseThrow(() -> {
-                        log.warn("Cannot find condition by given condition id [conditionId: {}]", r);
-                        throw new RuntimeException("!!"); // TODO
+                        log.warn("Cannot find condition by given condition id [conditionId: {}]", _conditionId);
+                        throw new ConditionNotFoundException(ErrorDesc.CONDITION_NOT_FOUND.getErrorDesc());
                     });
 
             course.addCondition(condition);
-        });
+        }
+
 
         course.addCollege(faculty.getCollege());
         course.addFaculty(faculty);

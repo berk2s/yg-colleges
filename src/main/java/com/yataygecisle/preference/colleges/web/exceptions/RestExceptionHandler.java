@@ -94,6 +94,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return errorResponse(new ErrorResponseDto(ErrorType.NOT_FOUND, ex.getMessage(), HttpStatus.NOT_FOUND));
     }
 
+    @ExceptionHandler(FacultyNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDto> handleFacultyNotFoundException(FacultyNotFoundException ex) {
+        log.warn("FacultyNotFoundException: {}" , ex.getMessage());
+        return errorResponse(new ErrorResponseDto(ErrorType.NOT_FOUND, ex.getMessage(), HttpStatus.NOT_FOUND));
+    }
+
+    @ExceptionHandler(DistrictNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDto> handleDistrictNotFoundException(DistrictNotFoundException ex) {
+        log.warn("DistrictNotFoundException: {}" , ex.getMessage());
+        return errorResponse(new ErrorResponseDto(ErrorType.NOT_FOUND, ex.getMessage(), HttpStatus.NOT_FOUND));
+    }
+
+    @ExceptionHandler(ConditionNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDto> handleConditionNotFoundException(ConditionNotFoundException ex) {
+        log.warn("ConditionNotFoundException: {}" , ex.getMessage());
+        return errorResponse(new ErrorResponseDto(ErrorType.NOT_FOUND, ex.getMessage(), HttpStatus.NOT_FOUND));
+    }
+
     private ResponseEntity<ErrorResponseDto> errorResponse(ErrorResponseDto errorResponseDto){
         return new ResponseEntity<>(errorResponseDto, errorResponseDto.getHttpStatus());
     }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -162,6 +163,117 @@ public class CourseControllerTest extends IntegrationTest {
                     .andExpect(jsonPath("$.error_description", is(ErrorDesc.COURSE_NOT_FOUND.name())));
 
         }
+
+
+        @DisplayName("Test Creating Endpoint Faculty Not Found")
+        @Test
+        void testCreatingEndpointFacultyNotFound() throws Exception {
+            Course course = getCourse();
+
+            CreateCourseDto createCourseDto = new CreateCourseDto();
+            createCourseDto.setCourseCode(1L);
+            createCourseDto.setCourseName("New Course");
+            createCourseDto.setCourseType(CourseType.FAK);
+            createCourseDto.setFunderType(FunderType.PRIVATE);
+            createCourseDto.setEducationType(EducationType.FORMAL);
+            createCourseDto.setCourseFeature(CourseFeature.ENGLISH);
+            createCourseDto.setPointType(PointType.SAY);
+            createCourseDto.setMinimumPoint(451.123);
+            createCourseDto.setMinimumOrder(12.912);
+            createCourseDto.setMinimumRequiredOrder(300000.0);
+            createCourseDto.setNominalDuration(4);
+            createCourseDto.setNominalQuota(80);
+            createCourseDto.setRegisteredStudents(82);
+            createCourseDto.setCollegeId(course.getCollege().getId().toString());
+            createCourseDto.setFacultyId(UUID.randomUUID().toString()); // invalid uuid
+            createCourseDto.setCountryId(course.getCountry().getId().toString());
+            createCourseDto.setProvinceId(course.getProvince().getId().toString());
+            createCourseDto.setDistrictId(course.getDistrict().getId().toString());
+
+            mockMvc.perform(post(CourseController.ENDPOINT)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createCourseDto)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.FACULTY_NOT_FOUND.name())));
+        }
+
+
+        @DisplayName("Test Creating Endpoint District Not Found")
+        @Test
+        void testCreatingEndpointDistrictNotFound() throws Exception {
+            Course course = getCourse();
+
+            CreateCourseDto createCourseDto = new CreateCourseDto();
+            createCourseDto.setCourseCode(1L);
+            createCourseDto.setCourseName("New Course");
+            createCourseDto.setCourseType(CourseType.FAK);
+            createCourseDto.setFunderType(FunderType.PRIVATE);
+            createCourseDto.setEducationType(EducationType.FORMAL);
+            createCourseDto.setCourseFeature(CourseFeature.ENGLISH);
+            createCourseDto.setPointType(PointType.SAY);
+            createCourseDto.setMinimumPoint(451.123);
+            createCourseDto.setMinimumOrder(12.912);
+            createCourseDto.setMinimumRequiredOrder(300000.0);
+            createCourseDto.setNominalDuration(4);
+            createCourseDto.setNominalQuota(80);
+            createCourseDto.setRegisteredStudents(82);
+            createCourseDto.setCollegeId(course.getCollege().getId().toString());
+            createCourseDto.setFacultyId(course.getFaculty().getId().toString());
+            createCourseDto.setCountryId(course.getCountry().getId().toString());
+            createCourseDto.setProvinceId(course.getProvince().getId().toString());
+            createCourseDto.setDistrictId(UUID.randomUUID().toString()); // invalid uuid
+
+            mockMvc.perform(post(CourseController.ENDPOINT)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createCourseDto)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.DISTRICT_NOT_FOUND.name())));
+        }
+
+
+        @DisplayName("Test Creating Endpoint Condition Not Found")
+        @Test
+        void testCreatingEndpointConditionNotFound() throws Exception {
+            Course course = getCourse();
+
+            CreateCourseDto createCourseDto = new CreateCourseDto();
+            createCourseDto.setCourseCode(1L);
+            createCourseDto.setCourseName("New Course");
+            createCourseDto.setCourseType(CourseType.FAK);
+            createCourseDto.setFunderType(FunderType.PRIVATE);
+            createCourseDto.setEducationType(EducationType.FORMAL);
+            createCourseDto.setCourseFeature(CourseFeature.ENGLISH);
+            createCourseDto.setPointType(PointType.SAY);
+            createCourseDto.setMinimumPoint(451.123);
+            createCourseDto.setMinimumOrder(12.912);
+            createCourseDto.setMinimumRequiredOrder(300000.0);
+            createCourseDto.setNominalDuration(4);
+            createCourseDto.setNominalQuota(80);
+            createCourseDto.setRegisteredStudents(82);
+            createCourseDto.setCollegeId(course.getCollege().getId().toString());
+            createCourseDto.setFacultyId(course.getFaculty().getId().toString());
+            createCourseDto.setCountryId(course.getCountry().getId().toString());
+            createCourseDto.setProvinceId(course.getProvince().getId().toString());
+            createCourseDto.setDistrictId(course.getDistrict().getId().toString());
+            createCourseDto.setSpecialConditions(List.of(UUID.randomUUID().toString()));
+
+            mockMvc.perform(post(CourseController.ENDPOINT)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createCourseDto)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.CONDITION_NOT_FOUND.getErrorDesc())));
+        }
+
+
 
     }
 

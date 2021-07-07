@@ -2,10 +2,7 @@ package com.yataygecisle.preference.colleges.bootstrap;
 
 import com.yataygecisle.preference.colleges.domain.*;
 import com.yataygecisle.preference.colleges.domain.enums.*;
-import com.yataygecisle.preference.colleges.repository.CollegeRepository;
-import com.yataygecisle.preference.colleges.repository.CountryRepository;
-import com.yataygecisle.preference.colleges.repository.DistrictRepository;
-import com.yataygecisle.preference.colleges.repository.ProvinceRepository;
+import com.yataygecisle.preference.colleges.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +22,7 @@ public class DataLoader implements CommandLineRunner {
     private final ProvinceRepository provinceRepository;
     private final CollegeRepository collegeRepository;
     private final DistrictRepository districtRepository;
+    private final ConditionRepository conditionRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -52,6 +50,13 @@ public class DataLoader implements CommandLineRunner {
         provinceRepository.save(province);
         districtRepository.save(district);
 
+        Condition condition = new Condition();
+        condition.setConditionId(UUID.randomUUID());
+        condition.setConditionDescription("This is a condition description");
+        condition.setReferenceNumber(44);
+
+        conditionRepository.save(condition);
+
         Course course = new Course();
         course.setCourseCode(1L);
         course.setCourseName("Computer Science");
@@ -69,6 +74,7 @@ public class DataLoader implements CommandLineRunner {
         course.addCountry(country);
         course.addProvince(province);
         course.addDistrict(district);
+        course.addCondition(condition);
 
         Faculty faculty = new Faculty();
         faculty.setFacultyName("Engineering Faculty");
@@ -80,6 +86,8 @@ public class DataLoader implements CommandLineRunner {
         college.addCourse(course);
 
         collegeRepository.save(college);
+
+
     }
 
 }
