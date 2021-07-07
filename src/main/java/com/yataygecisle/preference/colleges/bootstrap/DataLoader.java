@@ -28,9 +28,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (countryRepository.findAll().size() == 0) {
             loadInitialData();
-        }
     }
 
     @Transactional

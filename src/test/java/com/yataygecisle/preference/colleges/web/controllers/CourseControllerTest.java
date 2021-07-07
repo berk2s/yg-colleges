@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yataygecisle.preference.colleges.domain.Course;
 import com.yataygecisle.preference.colleges.domain.enums.*;
 import com.yataygecisle.preference.colleges.web.models.CreateCourseDto;
+import com.yataygecisle.preference.colleges.web.models.ErrorDesc;
+import com.yataygecisle.preference.colleges.web.models.ErrorType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,15 +35,16 @@ public class CourseControllerTest extends IntegrationTest {
 
     String accessToken;
 
+    @BeforeEach
+    void setUp() throws JsonProcessingException {
+        courseId = UUID.randomUUID();
+
+        accessToken = createAccessToken();
+    }
+
     @Nested
     class TestEndpoint {
 
-        @BeforeEach
-        void setUp() throws JsonProcessingException {
-            courseId = UUID.randomUUID();
-
-            accessToken = createAccessToken();
-        }
 
         @DisplayName("Get Course Successfully")
         @Test
@@ -130,6 +133,33 @@ public class CourseControllerTest extends IntegrationTest {
                     .andExpect(jsonPath("$.specialConditions").isEmpty())
                     .andExpect(jsonPath("$.minimumRequiredOrder", is(createCourseDto.getMinimumRequiredOrder())))
                     .andExpect(jsonPath("$.price").isEmpty());
+
+        }
+
+    }
+
+    @Nested
+    class TestExceptions {
+
+
+        @DisplayName("Test Unauthorized Request")
+        @Test
+        void testUnauthorizedRequest() throws Exception {
+
+            mockMvc.perform(get(CourseController.ENDPOINT + "/" + UUID.randomUUID().toString()))
+                    .andExpect(status().isUnauthorized());
+
+        }
+
+        @DisplayName("Test Course Not Found")
+        @Test
+        void testCourseNotFoundException() throws Exception {
+
+            mockMvc.perform(get(CourseController.ENDPOINT + "/" + UUID.randomUUID().toString())
+                    .header("Authorization", "Bearer " + accessToken))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.COURSE_NOT_FOUND.name())));
 
         }
 

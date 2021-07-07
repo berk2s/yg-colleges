@@ -3,9 +3,11 @@ package com.yataygecisle.preference.colleges.services.impl;
 import com.yataygecisle.preference.colleges.domain.*;
 import com.yataygecisle.preference.colleges.repository.*;
 import com.yataygecisle.preference.colleges.services.CourseService;
+import com.yataygecisle.preference.colleges.web.exceptions.CourseNotFoundException;
 import com.yataygecisle.preference.colleges.web.mappers.CourseMapper;
 import com.yataygecisle.preference.colleges.web.models.CourseDto;
 import com.yataygecisle.preference.colleges.web.models.CreateCourseDto;
+import com.yataygecisle.preference.colleges.web.models.ErrorDesc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +36,7 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> {
                    log.warn("Cannot find course by given course id [courseId: {}]", courseId);
-                   throw new RuntimeException("Invalid course id"); // TODO
+                   throw new CourseNotFoundException(ErrorDesc.COURSE_NOT_FOUND.name());
                 });
 
         return courseMapper.courseToCourseDto(course);
