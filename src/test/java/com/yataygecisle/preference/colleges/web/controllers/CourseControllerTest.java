@@ -160,7 +160,7 @@ public class CourseControllerTest extends IntegrationTest {
                     .header("Authorization", "Bearer " + accessToken))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
-                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.COURSE_NOT_FOUND.name())));
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.COURSE_NOT_FOUND.getErrorDesc())));
 
         }
 
@@ -197,7 +197,7 @@ public class CourseControllerTest extends IntegrationTest {
                     .andDo(print())
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
-                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.FACULTY_NOT_FOUND.name())));
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.FACULTY_NOT_FOUND.getErrorDesc())));
         }
 
 
@@ -233,7 +233,7 @@ public class CourseControllerTest extends IntegrationTest {
                     .andDo(print())
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.error", is(ErrorType.NOT_FOUND.getError())))
-                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.DISTRICT_NOT_FOUND.name())));
+                    .andExpect(jsonPath("$.error_description", is(ErrorDesc.DISTRICT_NOT_FOUND.getErrorDesc())));
         }
 
 
