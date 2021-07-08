@@ -1,4 +1,4 @@
-package com.yataygecisle.preference.college;
+package com.yataygecisle.preference.colleges;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
