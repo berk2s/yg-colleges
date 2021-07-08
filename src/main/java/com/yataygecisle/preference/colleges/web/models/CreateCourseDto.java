@@ -1,6 +1,6 @@
 package com.yataygecisle.preference.colleges.web.models;
 
-import com.yataygecisle.preference.colleges.annotations.UUID;
+import com.yataygecisle.commons.annotations.UUID;
 import com.yataygecisle.preference.colleges.domain.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

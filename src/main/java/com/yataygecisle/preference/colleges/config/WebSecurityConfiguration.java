@@ -1,6 +1,8 @@
 package com.yataygecisle.preference.colleges.config;
 
+import com.yataygecisle.commons.security.TokenClaimsConverter;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -25,18 +28,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .jwtAuthenticationConverter(getJwtAuthenticationConverter()));
     }
 
-    private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-            for (String authority : jwt.getClaimAsStringList("authorities")) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(authority));
-            }
-
-            return grantedAuthorities;
-        });
-
-        return converter;
+    @Bean
+    public Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
+        return TokenClaimsConverter.converter();
     }
 }
