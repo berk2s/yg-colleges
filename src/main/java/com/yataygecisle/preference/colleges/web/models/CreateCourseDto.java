@@ -18,65 +18,65 @@ import java.util.List;
 @Builder
 public class CreateCourseDto {
 
-    @NotNull
+    @NotNull(message = "Course Code must not be empty")
     private Long courseCode;
 
-    @NotNull
+    @NotNull(message = "Course Name must not be empty")
     private String courseName;
 
-    @NotNull
+    @NotNull(message = "Course Type must not be empty")
     private CourseType courseType;
 
-    @NotNull
+    @NotNull(message = "Funder Type must not be empty")
     private FunderType funderType;
 
-    @NotNull
+    @NotNull(message = "Education Type must not be empty")
     private EducationType educationType;
 
-    @NotNull
+    @NotNull(message = "Course Feature must not be empty")
     private CourseFeature courseFeature;
 
-    @NotNull
+    @NotNull(message = "Point Type must not be empty")
     private PointType pointType;
 
-    @NotNull
+    @NotNull(message = "Minimum Point must not be empty")
     private Double minimumPoint;
 
-    @NotNull
+    @NotNull(message = "Minimum Order must not be empty")
     private Double minimumOrder;
 
-    @NotNull
+    @NotNull(message = "Minimum Required Order must not be empty")
     private Double minimumRequiredOrder;
 
-    @NotNull
+    @NotNull(message = "Nominal Duration must not be empty")
     private Integer nominalDuration;
 
-    @NotNull
+    @NotNull(message = "Nominal Quota must not be empty")
     private Integer nominalQuota;
 
-    @NotNull
+    @NotNull(message = "Registered Students must not be empty")
     private Integer registeredStudents;
 
     private Double price;
 
-    @UUID
-    @NotNull
+    @UUID(message = "Faculty ID must be UUID")
+    @NotNull(message = "Course ID must not be empty")
     private String collegeId;
 
-    @UUID
-    @NotNull
+    @UUID(message = "Faculty ID must be UUID")
+    @NotNull(message = "Faculty ID must not be empty")
     private String facultyId;
 
-    @UUID
-    @NotNull
+    @UUID(message = "Country ID must be UUID")
+    @NotNull(message = "Country ID must not be empty")
     private String countryId;
 
-    @UUID
-    @NotNull
+    @UUID(message = "Province ID must be UUID")
+    @NotNull(message = "Province ID must not be empty")
     private String provinceId;
 
-    @UUID
-    @NotNull
+    @UUID(message = "District ID must be UUID")
+    @NotNull(message = "District ID must not be empty")
     private String districtId;
 
     private List<String> specialConditions = new ArrayList<>();

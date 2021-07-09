@@ -273,6 +273,38 @@ public class CourseControllerTest extends IntegrationTest {
                     .andExpect(jsonPath("$.error_description", is(ErrorDesc.CONDITION_NOT_FOUND.getErrorDesc())));
         }
 
+        @DisplayName("Test Creating Endpoint Request Body Not Valid")
+        @Test
+        void testCreatingEndpointRequestBodyNotValid() throws Exception {
+            Course course = getCourse();
+
+            CreateCourseDto createCourseDto = new CreateCourseDto();
+            createCourseDto.setCourseName("New Course");
+            createCourseDto.setCourseType(CourseType.FAK);
+            createCourseDto.setFunderType(FunderType.PRIVATE);
+            createCourseDto.setEducationType(EducationType.FORMAL);
+            createCourseDto.setCourseFeature(CourseFeature.ENGLISH);
+            createCourseDto.setPointType(PointType.SAY);
+            createCourseDto.setMinimumPoint(451.123);
+            createCourseDto.setMinimumOrder(12.912);
+            createCourseDto.setMinimumRequiredOrder(300000.0);
+            createCourseDto.setNominalDuration(4);
+            createCourseDto.setNominalQuota(80);
+            createCourseDto.setRegisteredStudents(82);
+            createCourseDto.setCollegeId(course.getCollege().getId().toString());
+            createCourseDto.setFacultyId(UUID.randomUUID().toString()); // invalid uuid
+            createCourseDto.setCountryId(course.getCountry().getId().toString());
+            createCourseDto.setProvinceId(course.getProvince().getId().toString());
+            createCourseDto.setDistrictId(course.getDistrict().getId().toString());
+
+            mockMvc.perform(post(CourseController.ENDPOINT)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createCourseDto)))
+                    .andDo(print())
+                    .andExpect(status().is4xxClientError());
+        }
+
 
 
     }
